@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Sortable from "sortablejs";
-import { showState } from "../../store/showData";
+import { showState } from "../../../store/showData";
 import { useRecoilState } from "recoil";
 
 function ContentPage(props) {
@@ -200,6 +200,14 @@ function ContentPage(props) {
           <hr className="mt-[16px] mb-[16px]"></hr>
 
           {/* ===================================================== */}
+
+          <div className="relative">
+            <input
+              className="border-[1px] rounded-[30px] w-[200px] h-[34px] pl-[20px] pr-[40px] "
+              placeholder="Search"
+            />
+            <i className="fa-solid fa-magnifying-glass text-slate-200 absolute ml-[-28px] mt-[10px]"></i>
+          </div>
 
           <h4 className="text-[24px] font-[500] text-[#212529] mb-[8px]">
             Danh sách báo cáo phân tích

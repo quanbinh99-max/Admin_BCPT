@@ -1,13 +1,18 @@
 import "./App.css";
-import TopBar from "./components/Topbar/TopBar";
-import SideMenu from "./components/SideMenu/SideMenu";
-import ContentPage from "./components/ContentPage/ContentPage";
+import Admin from "./components/Admin/Admin";
 import Form from "./components/Form/Form";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <div className="wrapper ">
-      <Form></Form>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/dangnhap" element={<Form />} />
+          <Route path="/Admin" element={<Admin />} />
+        </Routes>
+      </BrowserRouter>
+      ,
     </div>
   );
 }

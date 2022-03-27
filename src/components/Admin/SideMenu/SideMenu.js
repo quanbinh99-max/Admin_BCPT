@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./index.css";
-import { showState } from "../../store/showData";
+import { showState } from "../../../store/showData";
 import { useRecoilState } from "recoil";
 
 function SideMenu(props) {
