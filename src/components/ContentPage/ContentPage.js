@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Sortable from "sortablejs";
+import { showState } from "../../store/showData";
+import { useRecoilState } from "recoil";
 
 function ContentPage(props) {
+  useEffect(() => {
+    var el = document.getElementById("items");
+    var sortable = Sortable.create(el);
+  }, []);
+
+  const [dataShow, setDataShow] = useRecoilState(showState);
+  const { isShow } = dataShow;
+
   return (
-    <div className="content-page ml-[250px]">
+    <div
+      className={`content-page ${isShow === true ? "ml-[250px]" : "ml-[70px]"}`}
+    >
       <div className="content mt-[70px] ">
         <div className="title flex justify-between p-[20px]">
           <span className="text-[19.2px] text-[#212529] font-[500]">
@@ -36,9 +49,9 @@ function ContentPage(props) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                   <a
@@ -58,9 +71,9 @@ function ContentPage(props) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                   <span className="ml-1 text-sm font-medium text-gray-400 md:ml-2 dark:text-gray-500">
@@ -76,63 +89,100 @@ function ContentPage(props) {
 
         <div className="content-main bg-slate-100 py-[20px] px-[12px]">
           <form className="flex flex-col">
-            <input
-              type="text"
-              placeholder="Mã chứng khoán"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-            />
-            <input
-              type="text"
-              placeholder="Nguồn (công ty chứng khoán)"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-            />
-            <input
-              type="text"
-              placeholder="Tên báo cáo"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-            />
-            <input
-              type="text"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Giá mục tiêu"
-            />
-            <input
-              type="text"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Lợi nhuận sau thuế phóng"
-            />
-            <input
-              type="text"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Doanh thu dự phóng"
-            />
-            <input
-              type="text"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Khuyến nghị (mua/bán)"
-            />
-            <input
-              type="text"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder=""
-            />
-            <input
-              type="text"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Ngày công bố"
-            />
-            <select
-              name=""
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-            >
-              <option value="BaoCaoDoanhNghiep">Báo cáo doanh nghiệp</option>
-              <option value="BaoCaoNganh">Báo cáo ngành</option>
-            </select>
-            <input
-              type="file"
-              name="file"
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px] bg-white"
-            ></input>
+            <ul className="" id="items">
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  placeholder="Mã chứng khoán"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                />
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  placeholder="Nguồn (công ty chứng khoán)"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                />
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  placeholder="Tên báo cáo"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                />
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                  placeholder="Giá mục tiêu"
+                />
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                  placeholder="Lợi nhuận sau thuế phóng"
+                />
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                  placeholder="Doanh thu dự phóng"
+                />
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                  placeholder="Khuyến nghị (mua/bán)"
+                />
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                  placeholder=""
+                />
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="text"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                  placeholder="Ngày công bố"
+                />
+              </li>
+              <li>
+                {" "}
+                <select
+                  name=""
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+                >
+                  <option value="BaoCaoDoanhNghiep">
+                    Báo cáo doanh nghiệp
+                  </option>
+                  <option value="BaoCaoNganh">Báo cáo ngành</option>
+                </select>
+              </li>
+              <li>
+                {" "}
+                <input
+                  type="file"
+                  name="file"
+                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px] bg-white"
+                ></input>
+              </li>
+            </ul>
             <hr className="mt-[16px] mb-[16px]"></hr>
             <button className=" w-[64px] h-[38px] bg-[#039cfd] rounded-[4px] text-white">
               Nhập
