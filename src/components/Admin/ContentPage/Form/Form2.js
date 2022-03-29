@@ -1,8 +1,14 @@
 // Báo Cáo Ngành
 
-import React from "react";
+import React, { useEffect } from "react";
+import Sortable from "sortablejs";
 
 function Form2({ handleValueSelect }) {
+  useEffect(() => {
+    var el = document.getElementById("items");
+    var sortable = Sortable.create(el);
+  }, []);
+
   return (
     <div>
       {" "}

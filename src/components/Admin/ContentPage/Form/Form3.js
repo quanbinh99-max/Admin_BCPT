@@ -1,8 +1,14 @@
 // Báo Cáo Chiến Lược + Báo Cáo Vĩ Mô
 
-import React from "react";
+import React, { useEffect } from "react";
+import Sortable from "sortablejs";
 
 function Form3({ handleValueSelect }) {
+  useEffect(() => {
+    var el = document.getElementById("items");
+    var sortable = Sortable.create(el);
+  }, []);
+
   return (
     <div>
       {" "}
