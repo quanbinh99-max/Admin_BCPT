@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sortable from "sortablejs";
 import { showState } from "../../../store/showData";
 import { useRecoilState } from "recoil";
+import Form from "./Form/Form";
+import Form2 from "./Form/Form2";
+import Form3 from "./Form/Form3";
+import Table from "./Table/Table";
 
 function ContentPage(props) {
   useEffect(() => {
@@ -11,6 +15,12 @@ function ContentPage(props) {
 
   const [dataShow, setDataShow] = useRecoilState(showState);
   const { isShow } = dataShow;
+
+  const [valueSelect, setvalueSelect] = useState("BaoCaoDoanhNghiep");
+
+  const handleValueSelect = (e) => {
+    setvalueSelect(e.target.value);
+  };
 
   return (
     <div
@@ -88,108 +98,18 @@ function ContentPage(props) {
         {/* ==================================== */}
 
         <div className="content-main bg-slate-100 py-[20px] px-[12px]">
-          <form className="flex flex-col">
-            <ul className="" id="items">
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  placeholder="Mã chứng khoán"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                />
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  placeholder="Nguồn (công ty chứng khoán)"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                />
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  placeholder="Tên báo cáo"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                />
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                  placeholder="Giá mục tiêu"
-                />
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                  placeholder="Lợi nhuận sau thuế phóng"
-                />
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                  placeholder="Doanh thu dự phóng"
-                />
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                  placeholder="Khuyến nghị (mua/bán)"
-                />
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                  placeholder=""
-                />
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="text"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                  placeholder="Ngày công bố"
-                />
-              </li>
-              <li>
-                {" "}
-                <select
-                  name=""
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-                >
-                  <option value="BaoCaoDoanhNghiep">
-                    Báo cáo doanh nghiệp
-                  </option>
-                  <option value="BaoCaoNganh">Báo cáo ngành</option>
-                </select>
-              </li>
-              <li>
-                {" "}
-                <input
-                  type="file"
-                  name="file"
-                  className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px] bg-white"
-                ></input>
-              </li>
-            </ul>
-            <hr className="mt-[16px] mb-[16px]"></hr>
-            <button className=" w-[64px] h-[38px] bg-[#039cfd] rounded-[4px] text-white">
-              Nhập
-            </button>
-            <hr className="mt-[16px] mb-[16px]"></hr>
-          </form>
-
+          {valueSelect === "BaoCaoDoanhNghiep" && (
+            <Form handleValueSelect={handleValueSelect}></Form>
+          )}
+          {valueSelect === "BaoCaoNganh" && (
+            <Form2 handleValueSelect={handleValueSelect}></Form2>
+          )}
+          {valueSelect === "BaoCaoViMo" && (
+            <Form3 handleValueSelect={handleValueSelect}></Form3>
+          )}
+          {valueSelect === "BaoCaoChienLuoc" && (
+            <Form3 handleValueSelect={handleValueSelect}></Form3>
+          )}
           <a
             href="#"
             className="bg-[#1bb99a] py-[6px] px-[12px] rounded-[4px] text-white"
@@ -214,97 +134,8 @@ function ContentPage(props) {
           </h4>
 
           <hr></hr>
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Id
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    MaCK
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Nguồn
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Tên báo cáo
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Giá mục tiêu
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    LN dự phóng
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    DT dự phóng
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Khuyến nghị
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Loại BC
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Ngày KN
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    xóa
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-                  >
-                    10636
-                  </th>
-                  <td className="px-6 py-4">VHM</td>
-                  <td className="px-6 py-4">SBSC</td>
-                  <td className="px-6 py-4">
-                    <a href="#" className="">
-                      Doanh nghiệp Bất động sản số 1 Việt Nam
-                    </a>
-                  </td>
-                  <td className="px-6 py-4 text-right">106075</td>
-                  <td className="px-6 py-4 text-right">0</td>
-                  <td className="px-6 py-4 text-right">0</td>
-                  <td className="px-6 py-4 text-right">Mua</td>
-                  <td className="px-6 py-4 text-right">Báo Cáo Doanh Nghiệp</td>
-                  <td className="px-6 py-4 text-right">2022-03-25</td>
-                  <td className="px-6 py-4 text-right">
-                    <button>Xóa</button>
-                  </td>
-                </tr>
-                <tr className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-                  >
-                    10636
-                  </th>
-                  <td className="px-6 py-4">VHM</td>
-                  <td className="px-6 py-4">SBSC</td>
-                  <td className="px-6 py-4">
-                    <a href="#" className="">
-                      Doanh nghiệp Bất động sản số 1 Việt Nam
-                    </a>
-                  </td>
-                  <td className="px-6 py-4 text-right">106075</td>
-                  <td className="px-6 py-4 text-right">0</td>
-                  <td className="px-6 py-4 text-right">0</td>
-                  <td className="px-6 py-4 text-right">Mua</td>
-                  <td className="px-6 py-4 text-right">Báo Cáo Doanh Nghiệp</td>
-                  <td className="px-6 py-4 text-right">2022-03-25</td>
-                  <td className="px-6 py-4 text-right">
-                    <button>Xóa</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+
+          <Table></Table>
         </div>
       </div>
     </div>
