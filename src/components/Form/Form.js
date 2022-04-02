@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 
 function Form(props) {
+  const handleSubmit = () => {};
   return (
     <div className="h-[100vh] flex justify-center bg-[#64B0F2] relative">
       <div className="absolute border-[8px] border-[white] w-[436px] bg-[white] rounded-[8px] mt-[90px]">
@@ -35,7 +37,10 @@ function Form(props) {
                   Ghi nhớ thông tin đăng nhập
                 </span>
               </div>
-              <button className="w-[100%] px-[12px] py-[6px] bg-[#1BB99A] text-white rounded-[4px] text-[16px] font-[400]">
+              <button
+                className="w-[100%] px-[12px] py-[6px] bg-[#1BB99A] text-white rounded-[4px] text-[16px] font-[400]"
+                onClick={handleSubmit}
+              >
                 Đăng nhập
               </button>
             </form>

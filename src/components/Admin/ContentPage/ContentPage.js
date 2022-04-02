@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Sortable from "sortablejs";
 import { showState } from "../../../store/showData";
 import { useRecoilState } from "recoil";
 import Form from "./Form/Form";
@@ -7,6 +6,7 @@ import Form2 from "./Form/Form2";
 import Form3 from "./Form/Form3";
 import ContentHeader from "./ContentHeader/ContentHeader";
 import Table from "./Table/Table";
+import { BCPTData } from "../../../store/DanhSachBCPT";
 
 function ContentPage(props) {
   const [dataShow, setDataShow] = useRecoilState(showState);
@@ -16,6 +16,15 @@ function ContentPage(props) {
 
   const handleValueSelect = (e) => {
     setvalueSelect(e.target.value);
+  };
+
+  const [optionSearch, setoptionSearch] = useState("");
+  const [textSearch, setTextSearch] = useState("");
+  const valueOptionSearch = (e) => {
+    setoptionSearch(e.target.value);
+  };
+  const handleTextSearch = (e) => {
+    setTextSearch(e.target.value);
   };
 
   return (
@@ -52,19 +61,27 @@ function ContentPage(props) {
 
           <div className="flex justify-between">
             <div className="relative flex flex-col">
-              <span className="font-[500]">Tìm kiếm theo ô :</span>
-              <div className="text-[11px] flex">
-                <span className="text-red-500 flex self-center mr-[4px]">
-                  *{" "}
-                </span>
-                <span>Vui lòng chọn ô trước khi nhập</span>
-              </div>
-              <div className="mt-1">
-                <input
-                  className="border-[1px] rounded-[30px] w-[200px] h-[34px] pl-[20px] pr-[40px] "
-                  placeholder="Search"
-                />
-                <i className="fa-solid fa-magnifying-glass text-slate-200 absolute ml-[-28px] mt-[10px]"></i>
+              <span className="font-[500]">Tìm kiếm</span>
+              <div className="mt-1 flex ">
+                <select
+                  className="rounded-[16px] text-[12px] font-[500]"
+                  onChange={valueOptionSearch}
+                >
+                  <option value="">---Tìm kiếm theo---</option>
+                  <option value="MaChungKhoan">Mã chứng khoán</option>
+                  <option value="Nguon">Nguồn </option>
+                  <option value="TenBaoCao">Tên báo cáo</option>
+                  <option value="LoaiBaoCao">Loại báo cáo</option>
+                </select>
+                <div className="ml-[5px]">
+                  <input
+                    className="border-[1px] rounded-[30px] w-[200px] h-[34px] pl-[20px] pr-[40px] "
+                    placeholder="Search"
+                    onChange={handleTextSearch}
+                    disabled={optionSearch === "" ? true : false}
+                  />
+                  <i className="fa-solid fa-magnifying-glass text-slate-200 absolute ml-[-28px] mt-[10px]"></i>
+                </div>
               </div>
             </div>
             <div className="relative ">
@@ -92,7 +109,7 @@ function ContentPage(props) {
 
           <hr></hr>
 
-          <Table></Table>
+          <Table optionSearch={optionSearch} textSearch={textSearch}></Table>
         </div>
       </div>
     </div>

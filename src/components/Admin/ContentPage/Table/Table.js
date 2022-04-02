@@ -1,6 +1,94 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import BCPTapi from "../../../../api/BCPTapi";
+import { useRecoilState } from "recoil";
+import { BCPTData } from "../../../../store/DanhSachBCPT";
 
-function Table(props) {
+function Table({ optionSearch, textSearch }) {
+  const [DanhSachBCPT, setDanhSachBCPT] = useRecoilState(BCPTData);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchDanhSachBCPT = async () => {
+      try {
+        setLoading(true);
+        const response = await BCPTapi.getAll();
+        setDanhSachBCPT(response);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDanhSachBCPT();
+  }, []);
+
+  let showDSBCPT = [];
+
+  if (DanhSachBCPT.length !== 0) {
+    let ShowDanhSachBCPT = DanhSachBCPT;
+
+    switch (optionSearch) {
+      case "MaChungKhoan": {
+        ShowDanhSachBCPT = DanhSachBCPT.filter((BCPT) => {
+          return BCPT.MaCk.toLowerCase().includes(textSearch);
+        });
+        break;
+      }
+      case "Nguon": {
+        ShowDanhSachBCPT = DanhSachBCPT.filter((BCPT) => {
+          return BCPT.Nguon.toLowerCase().includes(textSearch);
+        });
+        break;
+      }
+      case "TenBaoCao": {
+        ShowDanhSachBCPT = DanhSachBCPT.filter((BCPT) => {
+          return BCPT.TenBaoCao.toLowerCase().includes(textSearch);
+        });
+        break;
+      }
+      case "LoaiBaoCao": {
+        ShowDanhSachBCPT = DanhSachBCPT.filter((BCPT) => {
+          return BCPT.LoaiBaoCao.toLowerCase().includes(textSearch);
+        });
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    showDSBCPT = ShowDanhSachBCPT.map((BCPT, index) => {
+      return (
+        <tr
+          key={index}
+          className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
+        >
+          <th
+            scope="row"
+            className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+          >
+            {BCPT.id}
+          </th>
+          <td className="px-6 py-4">{BCPT.MaCk}</td>
+          <td className="px-6 py-4">{BCPT.Nguon}</td>
+          <td className="px-6 py-4">
+            <a href="#" className="">
+              {BCPT.TenBaoCao}
+            </a>
+          </td>
+          <td className="px-6 py-4 text-right">{BCPT.GiaMucTieu}</td>
+          <td className="px-6 py-4 text-right">{BCPT.LNDuPhong}</td>
+          <td className="px-6 py-4 text-right">{BCPT.DTDuPhong}</td>
+          <td className="px-6 py-4 text-right">{BCPT.KhuyenNghi}</td>
+          <td className="px-6 py-4 text-right">{BCPT.LoaiBaoCao}</td>
+          <td className="px-6 py-4 text-right">{BCPT.NgayKhuyenNghi}</td>
+          <td className="px-6 py-4 text-right">{BCPT.NgayCapNhat}</td>
+          <td className="px-6 py-4 text-right">
+            <button>Xóa</button>
+          </td>
+        </tr>
+      );
+    });
+  }
+
   return (
     <div>
       {" "}
@@ -47,56 +135,17 @@ function Table(props) {
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-              >
-                10636
-              </th>
-              <td className="px-6 py-4">VHM</td>
-              <td className="px-6 py-4">SBSC</td>
-              <td className="px-6 py-4">
-                <a href="#" className="">
-                  Doanh nghiệp Bất động sản số 1 Việt Nam
-                </a>
-              </td>
-              <td className="px-6 py-4 text-right">106075</td>
-              <td className="px-6 py-4 text-right">0</td>
-              <td className="px-6 py-4 text-right">0</td>
-              <td className="px-6 py-4 text-right">Mua</td>
-              <td className="px-6 py-4 text-right">Báo Cáo Doanh Nghiệp</td>
-              <td className="px-6 py-4 text-right">2022-03-25</td>
-              <td className="px-6 py-4 text-right">2022-03-25</td>
-              <td className="px-6 py-4 text-right">
-                <button>Xóa</button>
-              </td>
-            </tr>
-            <tr className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-              >
-                10636
-              </th>
-              <td className="px-6 py-4">VHM</td>
-              <td className="px-6 py-4">SBSC</td>
-              <td className="px-6 py-4">
-                <a href="#" className="">
-                  Doanh nghiệp Bất động sản số 1 Việt Nam
-                </a>
-              </td>
-              <td className="px-6 py-4 text-right">106075</td>
-              <td className="px-6 py-4 text-right">0</td>
-              <td className="px-6 py-4 text-right">0</td>
-              <td className="px-6 py-4 text-right">Mua</td>
-              <td className="px-6 py-4 text-right">Báo Cáo Doanh Nghiệp</td>
-              <td className="px-6 py-4 text-right">2022-03-25</td>
-              <td className="px-6 py-4 text-right">2022-03-25</td>
-              <td className="px-6 py-4 text-right">
-                <button>Xóa</button>
-              </td>
-            </tr>
+            {loading && (
+              <tr className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+                >
+                  Loading...
+                </th>
+              </tr>
+            )}
+            {showDSBCPT}
           </tbody>
         </table>
       </div>
