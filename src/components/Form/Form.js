@@ -1,8 +1,39 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { loginApi } from "../../api/loginApi";
+import Cookies from "js-cookie";
+import { access_token } from "../../store/login";
+import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 function Form(props) {
-  const handleSubmit = () => {};
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const navigate = useNavigate();
+
+  const [accessToken, setAccessToken] = useRecoilState(access_token);
+
+  const onSubmit = (data) => {
+    const getToken = async () => {
+      try {
+        const response = await loginApi.getToken(data);
+        Cookies.set("token", response.content.token);
+        setAccessToken(response.content.token);
+        navigate("/admin");
+      } catch (error) {
+        alert("Sai tên đăng nhập hoặc mật khẩu");
+      }
+    };
+    getToken();
+  };
+
+  const [dataLogin, setDataLogin] = useState({});
+
   return (
     <div className="h-[100vh] flex justify-center bg-[#64B0F2] relative">
       <div className="absolute border-[8px] border-[white] w-[436px] bg-[white] rounded-[8px] mt-[90px]">
@@ -20,16 +51,22 @@ function Form(props) {
             <span className="text-[14.4px] text-[#212529] font-[400]">
               Bạn phải đăng nhập để sử dụng chức năng này
             </span>
-            <form className="mt-[20px]">
+            <form className="mt-[20px]" onSubmit={handleSubmit(onSubmit)}>
               <input
                 className="py-[6px] px-[12px] w-[100%] border-[2px] rounded-[4px] mb-[16px]"
                 type="text"
                 placeholder="Username"
+                // name="username
+                defaultValue=""
+                {...register("username")}
               />
               <input
                 className="py-[6px] px-[12px] w-[100%] border-[2px] rounded-[4px] mb-[16px]"
                 type="password"
                 placeholder="Password"
+                // name="password"
+                defaultValue=""
+                {...register("password")}
               />
               <div className="mb-[16px]">
                 <input type="checkbox" />

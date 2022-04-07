@@ -4,6 +4,10 @@ const BCPTapi = {
     const url = "/listData";
     return axiosClient.get(url, { params });
   },
+  delete: (id) => {
+    const url = `/listData/${id}`;
+    return axiosClient.delete(url);
+  },
 };
 
 export default BCPTapi;

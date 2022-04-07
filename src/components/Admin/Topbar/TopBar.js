@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { showState } from "../../../store/showData";
 import { useRecoilState } from "recoil";
+import Cookies from "js-cookie";
+import { access_token } from "../../../store/login";
 
 function TopBar(props) {
   const [dataShow, setDataShow] = useRecoilState(showState);
@@ -12,9 +14,15 @@ function TopBar(props) {
   };
 
   const [isShowNavUser, setIsShowNavUser] = useState(false);
-
   const handleNavUser = () => {
     setIsShowNavUser(!isShowNavUser);
+  };
+
+  const [accessToken, setAccessToken] = useRecoilState(access_token);
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    setAccessToken("");
   };
 
   return (
@@ -70,7 +78,10 @@ function TopBar(props) {
                 <i className="fa-solid fa-lock mr-[5px]"></i>
                 <span>Lock Screen</span>
               </div>
-              <div className="px-[20px] py-[12px] text-[14.4px]">
+              <div
+                className="px-[20px] py-[12px] text-[14.4px] cursor-pointer"
+                onClick={handleLogout}
+              >
                 <i className="fa-solid fa-power-off mr-[5px]"></i>
                 <span>Logout</span>
               </div>

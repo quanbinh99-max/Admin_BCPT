@@ -152,7 +152,7 @@ function Form({ handleValueSelect }) {
             <input
               type="file"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px] bg-white"
-              {...register("file", { required: true })}
+              {...register("file")}
             ></input>
           </li>
         </ul>
