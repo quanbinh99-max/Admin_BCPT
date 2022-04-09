@@ -22,6 +22,7 @@ function TopBar(props) {
 
   const handleLogout = () => {
     Cookies.remove("token");
+    sessionStorage.removeItem("token");
     setAccessToken("");
   };
 

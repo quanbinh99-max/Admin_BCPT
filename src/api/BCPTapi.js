@@ -1,12 +1,7 @@
 import axiosClient from "./axiosClient";
 const BCPTapi = {
-  getAll: (params) => {
-    const url = "/listData";
-    return axiosClient.get(url, { params });
-  },
-  delete: (id) => {
-    const url = `/listData/${id}`;
-    return axiosClient.delete(url);
+  getAll: (url, params) => {
+    return axiosClient.get(url, params);
   },
 };
 

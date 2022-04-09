@@ -4,7 +4,7 @@ import queryString from "query-string";
 // Set up default config for http requests here
 
 const axiosClient = axios.create({
-  baseURL: "https://6246594e739ac845918d489b.mockapi.io",
+  baseURL: "",
   headers: {
     "content-type": "application/json",
   },

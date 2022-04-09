@@ -17,12 +17,15 @@ function Form(props) {
   const navigate = useNavigate();
 
   const [accessToken, setAccessToken] = useRecoilState(access_token);
+  const [rememberPassword, setRememberPassword] = useState(false);
 
   const onSubmit = (data) => {
     const getToken = async () => {
       try {
         const response = await loginApi.getToken(data);
-        Cookies.set("token", response.content.token);
+        rememberPassword === true
+          ? Cookies.set("token", response.content.token)
+          : sessionStorage.setItem("token", response.content.token);
         setAccessToken(response.content.token);
         navigate("/admin");
       } catch (error) {
@@ -69,7 +72,10 @@ function Form(props) {
                 {...register("password")}
               />
               <div className="mb-[16px]">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  onChange={() => setRememberPassword(!rememberPassword)}
+                />
                 <span className="pl-[5px] text-[#212529] text-[14.4px] font-[500]">
                   Ghi nhớ thông tin đăng nhập
                 </span>

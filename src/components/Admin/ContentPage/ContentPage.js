@@ -20,11 +20,32 @@ function ContentPage(props) {
 
   const [optionSearch, setoptionSearch] = useState("");
   const [textSearch, setTextSearch] = useState("");
+  const [optionDaySearch, setOptionDaySearch] = useState("");
+  const [nameDaySearchFrom, setNameDaySearchFrom] = useState("");
+  const [nameDaySearchTo, setNameDaySearchTo] = useState("");
+  const [daySearchFrom, setDaySearchFrom] = useState("");
+  const [daySearchTo, setDaySearchTo] = useState("");
   const valueOptionSearch = (e) => {
     setoptionSearch(e.target.value);
   };
+  const valueOptionDaySearch = (e) => {
+    setOptionDaySearch(e.target.value);
+  };
+
   const handleTextSearch = (e) => {
     setTextSearch(e.target.value);
+  };
+
+  const handleDaySearchFrom = (e) => {
+    setDaySearchFrom(e.target.value);
+    setNameDaySearchFrom(e.target.name);
+  };
+
+  console.log(nameDaySearchFrom);
+
+  const handleDaySearchTo = (e) => {
+    setDaySearchTo(e.target.value);
+    setNameDaySearchTo(e.target.name);
   };
 
   return (
@@ -68,10 +89,10 @@ function ContentPage(props) {
                   onChange={valueOptionSearch}
                 >
                   <option value="">---Tìm kiếm theo---</option>
-                  <option value="MaChungKhoan">Mã chứng khoán</option>
-                  <option value="Nguon">Nguồn </option>
-                  <option value="TenBaoCao">Tên báo cáo</option>
-                  <option value="LoaiBaoCao">Loại báo cáo</option>
+                  <option value="mack">Mã chứng khoán</option>
+                  <option value="nguon">Nguồn </option>
+                  <option value="tenbaocao">Tên báo cáo</option>
+                  <option value="loaibaocao">Loại báo cáo</option>
                 </select>
                 <div className="ml-[5px]">
                   <input
@@ -84,20 +105,33 @@ function ContentPage(props) {
                 </div>
               </div>
             </div>
+
             <div className="relative ">
-              <span className="font-[500]">Tìm kiếm theo ngày:</span>
+              <select
+                className="rounded-[16px] text-[12px] font-[500]"
+                onChange={valueOptionDaySearch}
+              >
+                <option value="">---Tìm kiếm theo---</option>
+                <option value="ngaykn"> Ngày Khuyến Nghị </option>
+                <option value="ngay_congbo">Ngày Công Bố </option>
+              </select>
+
               <div className="mt-1">
                 <span className="font-[500]">Form: </span>
                 <input
                   type="date"
                   className="border-[1px] rounded-[30px] w-[210px] h-[34px] pl-[20px] pr-[40px] "
-                  placeholder="Search"
+                  onChange={handleDaySearchFrom}
+                  disabled={optionDaySearch === "" ? true : false}
+                  name={optionDaySearch + "_from"}
                 />
                 <span className="font-[500]"> To: </span>
                 <input
                   type="date"
                   className="border-[1px] rounded-[30px] w-[210px] h-[34px] pl-[20px] pr-[40px] "
-                  placeholder="Search"
+                  onChange={handleDaySearchTo}
+                  disabled={optionDaySearch === "" ? true : false}
+                  name={optionDaySearch + "_to"}
                 />
               </div>
             </div>
@@ -109,7 +143,15 @@ function ContentPage(props) {
 
           <hr></hr>
 
-          <Table optionSearch={optionSearch} textSearch={textSearch}></Table>
+          <Table
+            optionSearch={optionSearch}
+            textSearch={textSearch}
+            optionDaySearch={optionDaySearch}
+            daySearchFrom={daySearchFrom}
+            nameDaySearchFrom={nameDaySearchFrom}
+            daySearchTo={daySearchTo}
+            nameDaySearchTo={nameDaySearchTo}
+          ></Table>
         </div>
       </div>
     </div>

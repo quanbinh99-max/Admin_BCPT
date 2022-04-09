@@ -2,126 +2,95 @@ import React, { useEffect, useState } from "react";
 import BCPTapi from "../../../../api/BCPTapi";
 import { useRecoilState } from "recoil";
 import { BCPTData } from "../../../../store/DanhSachBCPT";
+import Cookies from "js-cookie";
+import Pagination from "./Pagination/Pagination";
+import { statePage } from "../../../../store/StatePage";
 
-function Table({ optionSearch, textSearch }) {
+function Table({
+  optionSearch,
+  textSearch,
+  optionDaySearch,
+  daySearchFrom,
+  nameDaySearchFrom,
+  daySearchTo,
+  nameDaySearchTo,
+}) {
   const [DanhSachBCPT, setDanhSachBCPT] = useRecoilState(BCPTData);
+  const [page, setPage] = useRecoilState(statePage);
   const [loading, setLoading] = useState(true);
 
+  const [total_page, setTotal_page] = useState();
   useEffect(() => {
+    const config = {
+      headers: {
+        Authorization:
+          "Bearer " + (Cookies.get("token") || sessionStorage.getItem("token")),
+      },
+    };
+
     const fetchDanhSachBCPT = async () => {
       try {
-        const response = await BCPTapi.getAll();
-        setDanhSachBCPT(response);
+        const url =
+          optionSearch === "" && optionDaySearch === ""
+            ? `https://beta.wichart.vn/wichartapi/admin/bcpt?page=${page.page}&limit=10`
+            : `https://beta.wichart.vn/wichartapi/admin/bcpt?${page}=${page.page}&limit=10&${optionSearch}=${textSearch}&${nameDaySearchFrom}=${daySearchFrom}&${nameDaySearchTo}=${daySearchTo}`;
+        const response = await BCPTapi.getAll(url, config);
+        setTotal_page(response.content.meta.total_page);
+        setDanhSachBCPT(response.content.data);
       } catch (error) {
         console.error(error);
       }
       setLoading(false);
     };
     fetchDanhSachBCPT();
-  }, []);
+  }, [
+    page.page,
+    optionSearch,
+    textSearch,
+    daySearchFrom,
+    nameDaySearchFrom,
+    daySearchTo,
+    nameDaySearchTo,
+  ]);
 
-  const handleDelete = (id) => {
-    const deleteDanhSachBCPT = async () => {
-      try {
-        const response = await BCPTapi.delete(id).then((response) => {
-          const cloneDanhSachBCPT = [...DanhSachBCPT];
-          cloneDanhSachBCPT.splice(findIndex(DanhSachBCPT, id), 1);
-          setDanhSachBCPT(cloneDanhSachBCPT);
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    deleteDanhSachBCPT();
-  };
-
-  const findIndex = (list, id) => {
-    var result = -1;
-    list.forEach((listItem, index) => {
-      if (listItem.id == id) {
-        result = index;
-      }
-    });
-    return result;
-  };
-
-  let showDSBCPT = [];
-
-  if (DanhSachBCPT.length !== 0) {
-    let FilltedDanhSachBCPT = DanhSachBCPT;
-
-    switch (optionSearch) {
-      case "MaChungKhoan": {
-        FilltedDanhSachBCPT = DanhSachBCPT.filter((BCPT) => {
-          return BCPT.MaCk.toLowerCase().includes(textSearch);
-        });
-        break;
-      }
-      case "Nguon": {
-        FilltedDanhSachBCPT = DanhSachBCPT.filter((BCPT) => {
-          return BCPT.Nguon.toLowerCase().includes(textSearch);
-        });
-        break;
-      }
-      case "TenBaoCao": {
-        FilltedDanhSachBCPT = DanhSachBCPT.filter((BCPT) => {
-          return BCPT.TenBaoCao.toLowerCase().includes(textSearch);
-        });
-        break;
-      }
-      case "LoaiBaoCao": {
-        FilltedDanhSachBCPT = DanhSachBCPT.filter((BCPT) => {
-          return BCPT.LoaiBaoCao.toLowerCase().includes(textSearch);
-        });
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-
-    showDSBCPT = FilltedDanhSachBCPT.map((BCPT, index) => {
-      return (
-        <tr
-          key={index}
-          className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
+  const showDSBCPT = DanhSachBCPT.map((BCPT, index) => {
+    return (
+      <tr
+        key={index}
+        className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
+      >
+        <th
+          scope="row"
+          className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
         >
-          <th
-            scope="row"
-            className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-          >
-            {BCPT.id}
-          </th>
-          <td className="px-6 py-4">{BCPT.MaCk}</td>
-          <td className="px-6 py-4">{BCPT.Nguon}</td>
-          <td className="px-6 py-4">
-            <a href="#" className="">
-              {BCPT.TenBaoCao}
-            </a>
-          </td>
-          <td className="px-6 py-4 text-right">{BCPT.GiaMucTieu}</td>
-          <td className="px-6 py-4 text-right">{BCPT.LNDuPhong}</td>
-          <td className="px-6 py-4 text-right">{BCPT.DTDuPhong}</td>
-          <td className="px-6 py-4 text-right">{BCPT.KhuyenNghi}</td>
-          <td className="px-6 py-4 text-right">{BCPT.LoaiBaoCao}</td>
-          <td className="px-6 py-4 text-right">
-            {new Date(BCPT.NgayKhuyenNghi).toUTCString()}
-          </td>
-          <td className="px-6 py-4 text-right">
-            {new Date(BCPT.NgayCapNhat).toUTCString()}
-          </td>
-          <td className="px-6 py-4 text-right">
-            <button
-              className="bg-blue-500 px-[12px] py-[8px] rounded-[4px]"
-              onClick={() => handleDelete(BCPT.id)}
-            >
-              <span className="text-yellow-50">Xóa</span>
-            </button>
-          </td>
-        </tr>
-      );
-    });
-  }
+          {BCPT.id}
+        </th>
+        <td className="px-6 py-4">{BCPT.mack}</td>
+        <td className="px-6 py-4">{BCPT.nguon}</td>
+        <td className="px-6 py-4">
+          <a href="#" className="">
+            {BCPT.tenbaocao}
+          </a>
+        </td>
+        <td className="px-6 py-4 text-right">{BCPT.giamuctieu}</td>
+        <td className="px-6 py-4 text-right">{BCPT.giamuctieu}</td>
+        <td className="px-6 py-4 text-right">{BCPT.doanhthu_duphong}</td>
+        <td className="px-6 py-4 text-right">{BCPT.khuyennghi}</td>
+        <td className="px-6 py-4 text-right">{BCPT.loaibaocao}</td>
+        <td className="px-6 py-4 text-right">
+          {new Date(BCPT.ngaykn).toUTCString()}
+        </td>
+        <td className="px-6 py-4 text-right">
+          {new Date(BCPT.ngay_congbo).toUTCString()}
+        </td>
+        <td className="px-6 py-4 text-right">
+          <button className="bg-blue-500 px-[12px] py-[8px] rounded-[4px]">
+            <span className="text-yellow-50">Xóa</span>
+          </button>
+        </td>
+      </tr>
+    );
+  });
 
   return (
     <div>
@@ -177,7 +146,7 @@ function Table({ optionSearch, textSearch }) {
                 >
                   <svg
                     role="status"
-                    class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                    className="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                     viewBox="0 0 100 101"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -197,6 +166,9 @@ function Table({ optionSearch, textSearch }) {
             {showDSBCPT}
           </tbody>
         </table>
+      </div>
+      <div className="text-center mt-[20px]">
+        <Pagination total_page={total_page}></Pagination>
       </div>
     </div>
   );
