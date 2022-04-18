@@ -6,13 +6,12 @@ import Form2 from "./Form/Form2";
 import Form3 from "./Form/Form3";
 import ContentHeader from "./ContentHeader/ContentHeader";
 import Table from "./Table/Table";
-import { BCPTData } from "../../../store/DanhSachBCPT";
 
 function ContentPage(props) {
   const [dataShow, setDataShow] = useRecoilState(showState);
   const { isShow } = dataShow;
 
-  const [valueSelect, setvalueSelect] = useState("BaoCaoDoanhNghiep");
+  const [valueSelect, setvalueSelect] = useState("Báo cáo doanh nghiệp");
 
   const handleValueSelect = (e) => {
     setvalueSelect(e.target.value);
@@ -41,8 +40,6 @@ function ContentPage(props) {
     setNameDaySearchFrom(e.target.name);
   };
 
-  console.log(nameDaySearchFrom);
-
   const handleDaySearchTo = (e) => {
     setDaySearchTo(e.target.value);
     setNameDaySearchTo(e.target.name);
@@ -57,16 +54,16 @@ function ContentPage(props) {
         {/* ==================================== */}
 
         <div className="content-main bg-slate-100 py-[20px] px-[12px]">
-          {valueSelect === "BaoCaoDoanhNghiep" && (
+          {valueSelect === "Báo cáo doanh nghiệp" && (
             <Form handleValueSelect={handleValueSelect}></Form>
           )}
-          {valueSelect === "BaoCaoNganh" && (
+          {valueSelect === "Báo cáo ngành" && (
             <Form2 handleValueSelect={handleValueSelect}></Form2>
           )}
-          {valueSelect === "BaoCaoViMo" && (
+          {valueSelect === "Báo cáo vĩ mô" && (
             <Form3 handleValueSelect={handleValueSelect}></Form3>
           )}
-          {valueSelect === "BaoCaoChienLuoc" && (
+          {valueSelect === "Báo cáo chiến lược" && (
             <Form3 handleValueSelect={handleValueSelect}></Form3>
           )}
           <a
@@ -124,6 +121,7 @@ function ContentPage(props) {
                   onChange={handleDaySearchFrom}
                   disabled={optionDaySearch === "" ? true : false}
                   name={optionDaySearch + "_from"}
+                  value={optionDaySearch === "" ? "" : daySearchFrom}
                 />
                 <span className="font-[500]"> To: </span>
                 <input
@@ -132,6 +130,7 @@ function ContentPage(props) {
                   onChange={handleDaySearchTo}
                   disabled={optionDaySearch === "" ? true : false}
                   name={optionDaySearch + "_to"}
+                  value={optionDaySearch === "" ? "" : daySearchTo}
                 />
               </div>
             </div>

@@ -29,7 +29,7 @@ function TopBar(props) {
   return (
     <div className=" h-[70px] fixed left-0 right-0 top-0 z-10 flex ">
       {isShow === true ? (
-        <div className="w-[250px]">
+        <div className="w-[250px] ease-in duration-100">
           <a
             href="#"
             className="leading-[70px] text-[20px] text-[#2b3d51] font-[700] flex justify-center "
@@ -39,7 +39,7 @@ function TopBar(props) {
           </a>
         </div>
       ) : (
-        <div className="w-[70px] flex self-center justify-center">
+        <div className="w-[70px] flex self-center justify-center ease-in duration-100">
           <i className="fa-solid fa-user-tie flex self-center "></i>
         </div>
       )}
@@ -62,7 +62,7 @@ function TopBar(props) {
             <div
               className={`absolute top-[70px] right-0 w-[168px] bg-[white] border-[2px] rounded-[4px] ${
                 isShowNavUser === false ? "hidden" : ""
-              }`}
+              } `}
             >
               <div className="px-[20px] py-[12px] text-[16px]">
                 Welcome ! John

@@ -14,7 +14,7 @@ function SideMenu(props) {
     <div>
       {isShow === true ? (
         <div className="absolute w-[250px] top-[70px] ">
-          <ul className="fixed w-[250px]">
+          <ul className="fixed w-[250px] ">
             <li className="text-[13px] px-[12px] py-[20px] leading-[1] tracking-[0.035em] text-[#818a91]">
               Trình quản lí
             </li>

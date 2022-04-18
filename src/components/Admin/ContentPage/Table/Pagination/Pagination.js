@@ -1,10 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
 import ReactPaginate from "react-paginate";
 import { statePage } from "../../../../../store/StatePage";
 import { useRecoilState } from "recoil";
-
-Pagination.propTypes = {};
 
 function Pagination({ total_page }) {
   const [page, setPage] = useRecoilState(statePage);
@@ -14,10 +11,10 @@ function Pagination({ total_page }) {
   return (
     <div>
       <ReactPaginate
-        breakLabel="..."
+        breakLabel="  . . .  "
         nextLabel="next >"
         onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
+        pageRangeDisplayed={3}
         pageCount={total_page}
         previousLabel="< previous"
         renderOnZeroPageCount={null}

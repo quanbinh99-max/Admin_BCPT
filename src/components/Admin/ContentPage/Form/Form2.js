@@ -3,7 +3,8 @@
 import React, { useEffect } from "react";
 import Sortable from "sortablejs";
 import { useForm } from "react-hook-form";
-
+import BCPTapi from "../../../../api/BCPTapi";
+import Cookies from "js-cookie";
 function Form2({ handleValueSelect }) {
   useEffect(() => {
     var el = document.getElementById("items");
@@ -17,7 +18,23 @@ function Form2({ handleValueSelect }) {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    const config = {
+      headers: {
+        Authorization:
+          "Bearer " + (Cookies.get("token") || sessionStorage.getItem("token")),
+      },
+    };
+    const insertBCPT = async () => {
+      try {
+        const url = "https://beta.wichart.vn/wichartapi/admin/bcpt";
+        const response = await BCPTapi.insertBCPT(url, data, config);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    insertBCPT();
+  };
 
   return (
     <div>
@@ -31,12 +48,16 @@ function Form2({ handleValueSelect }) {
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]
         required"
               onChange={handleValueSelect}
+              {...register("loaibaocao", {
+                required: true,
+                onChange: handleValueSelect,
+              })}
             >
               <option value="">---Loại Báo Cáo---</option>
-              <option value="BaoCaoDoanhNghiep">Báo cáo doanh nghiệp</option>
-              <option value="BaoCaoNganh">Báo cáo ngành</option>
-              <option value="BaoCaoViMo">Báo cáo vĩ mô</option>
-              <option value="BaoCaoChienLuoc">Báo cáo chiến lược</option>
+              <option value="Báo cáo doah nghiệp">Báo cáo doanh nghiệp</option>
+              <option value="Báo cáo ngành">Báo cáo ngành</option>
+              <option value="Báo cáo vĩ mô">Báo cáo vĩ mô</option>
+              <option value="Báo cáo chiến lược">Báo cáo chiến lược</option>
             </select>
           </li>
           <li>
@@ -54,7 +75,7 @@ function Form2({ handleValueSelect }) {
               type="text"
               placeholder="Nguồn (công ty chứng khoán)"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              {...register("Nguon", { required: true })}
+              {...register("nguon", { required: true })}
             />
           </li>
           <li>
@@ -63,7 +84,7 @@ function Form2({ handleValueSelect }) {
               type="text"
               placeholder="Tên báo cáo"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              {...register("TenBaoCao", { required: true })}
+              {...register("tenbaocao", { required: true })}
             />
           </li>
           <li>
@@ -99,7 +120,7 @@ function Form2({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="Khuyến nghị (mua/bán)"
-              {...register("KhuyenNghi", { required: true })}
+              {...register("khuyennghi", { required: true })}
             />
           </li>
           <li>
@@ -108,10 +129,10 @@ function Form2({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="Ngày cập nhật"
-              {...register("NgayCapNhat", { required: true })}
+              {...register("ngay_congbo", { required: true })}
             />
           </li>
-          <li>
+          {/* <li>
             {" "}
             <input
               type="text"
@@ -119,14 +140,14 @@ function Form2({ handleValueSelect }) {
               placeholder="Thuộc Ngành"
               {...register("ThuocNganh", { required: true })}
             />
-          </li>
+          </li> */}
           <li>
             {" "}
             <input
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="Ngày Khuyến Nghị"
-              {...register("NgayKhuyenNghi", { required: true })}
+              {...register("ngaykn", { required: true })}
             />
           </li>
 

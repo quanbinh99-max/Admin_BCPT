@@ -5,6 +5,8 @@ import Sortable from "sortablejs";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { DataInput } from "../../../../store/DataInput";
+import Cookies from "js-cookie";
+import BCPTapi from "../../../../api/BCPTapi";
 
 function Form({ handleValueSelect }) {
   useEffect(() => {
@@ -20,13 +22,26 @@ function Form({ handleValueSelect }) {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const config = {
+      headers: {
+        Authorization:
+          "Bearer " + (Cookies.get("token") || sessionStorage.getItem("token")),
+      },
+    };
+    const insertBCPT = async () => {
+      try {
+        const url = "https://beta.wichart.vn/wichartapi/admin/bcpt";
+        const response = await BCPTapi.insertBCPT(url, data, config);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    insertBCPT();
   };
 
   const [valueInput, setValueInput] = useState("");
 
-  const [dataInput, setDataInput] = useRecoilState(DataInput);
-
+  const [dataInput, setDataInput] = useState("");
   return (
     <div>
       {" "}
@@ -36,15 +51,17 @@ function Form({ handleValueSelect }) {
             {" "}
             <select
               name=""
-              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]
-        required"
-              onChange={handleValueSelect}
+              className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+              {...register("loaibaocao", {
+                required: true,
+                onChange: handleValueSelect,
+              })}
             >
               <option value="">---Loại Báo Cáo---</option>
-              <option value="BaoCaoDoanhNghiep">Báo cáo doanh nghiệp</option>
-              <option value="BaoCaoNganh">Báo cáo ngành</option>
-              <option value="BaoCaoViMo">Báo cáo vĩ mô</option>
-              <option value="BaoCaoChienLuoc">Báo cáo chiến lược</option>
+              <option value="Báo cáo doanh nghiệp">Báo cáo doanh nghiệp</option>
+              <option value="Báo cáo ngành">Báo cáo ngành</option>
+              <option value="Báo cáo vĩ mô">Báo cáo vĩ mô</option>
+              <option value="Báo cáo chiến lược">Báo cáo chiến lược</option>
             </select>
           </li>
           <li>
@@ -53,7 +70,7 @@ function Form({ handleValueSelect }) {
               type="text"
               placeholder="Mã chứng khoán"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              {...register("MaCk", { required: true })}
+              {...register("mack", { required: true })}
             />
           </li>
           <li>
@@ -62,7 +79,7 @@ function Form({ handleValueSelect }) {
               type="text"
               placeholder="Nguồn (công ty chứng khoán)"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              {...register("Nguon", { required: true })}
+              {...register("nguon", { required: true })}
             />
           </li>
           <li>
@@ -71,7 +88,7 @@ function Form({ handleValueSelect }) {
               type="text"
               placeholder="Tên báo cáo"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              {...register("TenBaoCao", { required: true })}
+              {...register("tenbaocao", { required: true })}
             />
           </li>
           <li>
@@ -80,7 +97,7 @@ function Form({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="Giá mục tiêu"
-              {...register("GiaMucTieu", { required: true })}
+              {...register("giamuctieu", { required: true })}
             />
           </li>
           <li>
@@ -89,7 +106,7 @@ function Form({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="LNST dự phóng năm"
-              {...register("LNSTDuPhongNam", { required: true })}
+              {...register("lnst_duphong", { required: true })}
             />
           </li>
           <li>
@@ -98,7 +115,7 @@ function Form({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="LNST năm n+1"
-              {...register("LNSTNam_n+1", { required: true })}
+              {...register("lnst_duphong_n1", { required: true })}
             />
           </li>
           <li>
@@ -107,7 +124,7 @@ function Form({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="LNST năm n+2"
-              {...register("LNSTNam_n+2", { required: true })}
+              {...register("lnst_duphong_n2", { required: true })}
             />
           </li>
           <li>
@@ -116,7 +133,7 @@ function Form({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="Doanh thu dự phóng"
-              {...register("DoanThuDuPhong", { required: true })}
+              {...register("doanhthu_duphong", { required: true })}
             />
           </li>
           <li>
@@ -125,7 +142,7 @@ function Form({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="Khuyến nghị (mua/bán)"
-              {...register("KhuyenNghi", { required: true })}
+              {...register("khuyennghi", { required: true })}
             />
           </li>
           <li>
@@ -134,7 +151,7 @@ function Form({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="Ngày cập nhật"
-              {...register("NgayCapNhat", { required: true })}
+              {...register("ngay_congbo", { required: true })}
             />
           </li>
           <li>
@@ -143,7 +160,7 @@ function Form({ handleValueSelect }) {
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
               placeholder="Ngày Khuyến Nghị"
-              {...register("NgayKhuyenNghi", { required: true })}
+              {...register("ngaykn", { required: true })}
             />
           </li>
 

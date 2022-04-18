@@ -28,12 +28,17 @@ function Table({
       },
     };
 
+    if (optionDaySearch === "") {
+      daySearchFrom = "";
+      daySearchTo = "";
+    }
+
     const fetchDanhSachBCPT = async () => {
       try {
         const url =
           optionSearch === "" && optionDaySearch === ""
             ? `https://beta.wichart.vn/wichartapi/admin/bcpt?page=${page.page}&limit=10`
-            : `https://beta.wichart.vn/wichartapi/admin/bcpt?${page}=${page.page}&limit=10&${optionSearch}=${textSearch}&${nameDaySearchFrom}=${daySearchFrom}&${nameDaySearchTo}=${daySearchTo}`;
+            : `https://beta.wichart.vn/wichartapi/admin/bcpt?page=${page.page}&limit=10&${optionSearch}=${textSearch}&${nameDaySearchFrom}=${daySearchFrom}&${nameDaySearchTo}=${daySearchTo}`;
         const response = await BCPTapi.getAll(url, config);
         setTotal_page(response.content.meta.total_page);
         setDanhSachBCPT(response.content.data);
@@ -46,6 +51,7 @@ function Table({
   }, [
     page.page,
     optionSearch,
+    optionDaySearch,
     textSearch,
     daySearchFrom,
     nameDaySearchFrom,
@@ -68,8 +74,12 @@ function Table({
         <td className="px-6 py-4">{BCPT.mack}</td>
         <td className="px-6 py-4">{BCPT.nguon}</td>
         <td className="px-6 py-4">
-          <a href="#" className="">
-            {BCPT.tenbaocao}
+          <a
+            href={`https://data.wichart.vn/public/baocaophantich/${BCPT.linktai_wi}`}
+          >
+            <span className="hover:text-cyan-500 hover:underline">
+              {BCPT.tenbaocao}
+            </span>
           </a>
         </td>
         <td className="px-6 py-4 text-right">{BCPT.giamuctieu}</td>
