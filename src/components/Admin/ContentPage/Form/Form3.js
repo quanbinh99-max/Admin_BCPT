@@ -5,8 +5,17 @@ import Sortable from "sortablejs";
 import { useForm } from "react-hook-form";
 import BCPTapi from "../../../../api/BCPTapi";
 import Cookies from "js-cookie";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-function Form3({ handleValueSelect }) {
+const schema = yup
+  .object({
+    ngaykn: yup.date(),
+    ngay_congbo: yup.date(),
+  })
+  .required();
+
+function Form3({ handleValueSelect, valueSelect }) {
   useEffect(() => {
     var el = document.getElementById("items");
     var sortable = Sortable.create(el);
@@ -17,9 +26,12 @@ function Form3({ handleValueSelect }) {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const onSubmit = (data) => {
+    console.log(data);
     const config = {
       headers: {
         Authorization:
@@ -30,6 +42,7 @@ function Form3({ handleValueSelect }) {
       try {
         const url = "https://beta.wichart.vn/wichartapi/admin/bcpt";
         const response = await BCPTapi.insertBCPT(url, data, config);
+        alert("Thêm Thành Công!!!");
       } catch (error) {
         console.log(error);
       }
@@ -48,7 +61,7 @@ function Form3({ handleValueSelect }) {
               name=""
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]
         required"
-              onChange={handleValueSelect}
+              value={valueSelect}
               {...register("loaibaocao", {
                 required: true,
                 onChange: handleValueSelect,
@@ -132,6 +145,7 @@ function Form3({ handleValueSelect }) {
               placeholder="Ngày cập nhật"
               {...register("ngay_congbo", { required: true })}
             />
+            <p>{errors.ngay_congbo?.message}</p>
           </li>
           <li>
             {" "}
@@ -141,6 +155,7 @@ function Form3({ handleValueSelect }) {
               placeholder="Ngày Khuyến Nghị"
               {...register("ngaykn", { required: true })}
             />
+            <p>{errors.ngaykn?.message}</p>
           </li>
 
           <li>

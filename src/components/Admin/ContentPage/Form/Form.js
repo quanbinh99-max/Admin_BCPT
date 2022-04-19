@@ -3,12 +3,24 @@
 import React, { useEffect, useState } from "react";
 import Sortable from "sortablejs";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
-import { DataInput } from "../../../../store/DataInput";
 import Cookies from "js-cookie";
 import BCPTapi from "../../../../api/BCPTapi";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-function Form({ handleValueSelect }) {
+const schema = yup
+  .object({
+    giamuctieu: yup.number().positive().integer().required(),
+    lnst_duphong: yup.number().positive().integer().required(),
+    lnst_duphong_n1: yup.number().positive().integer().required(),
+    lnst_duphong_n2: yup.number().positive().integer().required(),
+    doanhthu_duphong: yup.number().positive().integer().required(),
+    ngaykn: yup.date(),
+    ngay_congbo: yup.date(),
+  })
+  .required();
+
+function Form({ handleValueSelect, valueSelect }) {
   useEffect(() => {
     var el = document.getElementById("items");
     var sortable = Sortable.create(el);
@@ -19,9 +31,12 @@ function Form({ handleValueSelect }) {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const onSubmit = (data) => {
+    console.log(data);
     const config = {
       headers: {
         Authorization:
@@ -32,6 +47,7 @@ function Form({ handleValueSelect }) {
       try {
         const url = "https://beta.wichart.vn/wichartapi/admin/bcpt";
         const response = await BCPTapi.insertBCPT(url, data, config);
+        alert("Thêm Thành Công!!!");
       } catch (error) {
         console.log(error);
       }
@@ -39,9 +55,6 @@ function Form({ handleValueSelect }) {
     insertBCPT();
   };
 
-  const [valueInput, setValueInput] = useState("");
-
-  const [dataInput, setDataInput] = useState("");
   return (
     <div>
       {" "}
@@ -52,6 +65,7 @@ function Form({ handleValueSelect }) {
             <select
               name=""
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
+              value={valueSelect}
               {...register("loaibaocao", {
                 required: true,
                 onChange: handleValueSelect,
@@ -99,6 +113,7 @@ function Form({ handleValueSelect }) {
               placeholder="Giá mục tiêu"
               {...register("giamuctieu", { required: true })}
             />
+            <p>{errors.giamuctieu?.message}</p>
           </li>
           <li>
             {" "}
@@ -108,6 +123,7 @@ function Form({ handleValueSelect }) {
               placeholder="LNST dự phóng năm"
               {...register("lnst_duphong", { required: true })}
             />
+            <p>{errors.giamuctieu?.message}</p>
           </li>
           <li>
             {" "}
@@ -118,6 +134,7 @@ function Form({ handleValueSelect }) {
               {...register("lnst_duphong_n1", { required: true })}
             />
           </li>
+          <p>{errors.giamuctieu?.message}</p>
           <li>
             {" "}
             <input
@@ -126,6 +143,7 @@ function Form({ handleValueSelect }) {
               placeholder="LNST năm n+2"
               {...register("lnst_duphong_n2", { required: true })}
             />
+            <p>{errors.giamuctieu?.message}</p>
           </li>
           <li>
             {" "}
@@ -135,6 +153,7 @@ function Form({ handleValueSelect }) {
               placeholder="Doanh thu dự phóng"
               {...register("doanhthu_duphong", { required: true })}
             />
+            <p>{errors.giamuctieu?.message}</p>
           </li>
           <li>
             {" "}
@@ -162,6 +181,7 @@ function Form({ handleValueSelect }) {
               placeholder="Ngày Khuyến Nghị"
               {...register("ngaykn", { required: true })}
             />
+            <p>{errors.ngaykn?.message}</p>
           </li>
 
           <li>
@@ -169,7 +189,7 @@ function Form({ handleValueSelect }) {
             <input
               type="file"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px] bg-white"
-              {...register("file")}
+              {...register("file", { required: true })}
             ></input>
           </li>
         </ul>

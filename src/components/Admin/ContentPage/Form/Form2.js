@@ -5,7 +5,17 @@ import Sortable from "sortablejs";
 import { useForm } from "react-hook-form";
 import BCPTapi from "../../../../api/BCPTapi";
 import Cookies from "js-cookie";
-function Form2({ handleValueSelect }) {
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup
+  .object({
+    ngaykn: yup.date(),
+    ngay_congbo: yup.date(),
+  })
+  .required();
+
+function Form2({ handleValueSelect, valueSelect }) {
   useEffect(() => {
     var el = document.getElementById("items");
     var sortable = Sortable.create(el);
@@ -16,9 +26,12 @@ function Form2({ handleValueSelect }) {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const onSubmit = (data) => {
+    console.log(data);
     const config = {
       headers: {
         Authorization:
@@ -29,6 +42,7 @@ function Form2({ handleValueSelect }) {
       try {
         const url = "https://beta.wichart.vn/wichartapi/admin/bcpt";
         const response = await BCPTapi.insertBCPT(url, data, config);
+        alert("Thêm Thành Công!!!");
       } catch (error) {
         console.log(error);
       }
@@ -47,14 +61,14 @@ function Form2({ handleValueSelect }) {
               name=""
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]
         required"
-              onChange={handleValueSelect}
+              value={valueSelect}
               {...register("loaibaocao", {
                 required: true,
                 onChange: handleValueSelect,
               })}
             >
               <option value="">---Loại Báo Cáo---</option>
-              <option value="Báo cáo doah nghiệp">Báo cáo doanh nghiệp</option>
+              <option value="Báo cáo doanh nghiệp">Báo cáo doanh nghiệp</option>
               <option value="Báo cáo ngành">Báo cáo ngành</option>
               <option value="Báo cáo vĩ mô">Báo cáo vĩ mô</option>
               <option value="Báo cáo chiến lược">Báo cáo chiến lược</option>
@@ -122,6 +136,7 @@ function Form2({ handleValueSelect }) {
               placeholder="Khuyến nghị (mua/bán)"
               {...register("khuyennghi", { required: true })}
             />
+            <p>{errors.khuyennghi?.message}</p>
           </li>
           <li>
             {" "}
@@ -131,6 +146,7 @@ function Form2({ handleValueSelect }) {
               placeholder="Ngày cập nhật"
               {...register("ngay_congbo", { required: true })}
             />
+            <p>{errors.ngay_congbo?.message}</p>
           </li>
           {/* <li>
             {" "}

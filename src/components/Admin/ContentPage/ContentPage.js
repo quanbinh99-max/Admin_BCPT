@@ -55,16 +55,28 @@ function ContentPage(props) {
 
         <div className="content-main bg-slate-100 py-[20px] px-[12px]">
           {valueSelect === "Báo cáo doanh nghiệp" && (
-            <Form handleValueSelect={handleValueSelect}></Form>
+            <Form
+              handleValueSelect={handleValueSelect}
+              valueSelect={valueSelect}
+            ></Form>
           )}
           {valueSelect === "Báo cáo ngành" && (
-            <Form2 handleValueSelect={handleValueSelect}></Form2>
+            <Form2
+              handleValueSelect={handleValueSelect}
+              valueSelect={valueSelect}
+            ></Form2>
           )}
           {valueSelect === "Báo cáo vĩ mô" && (
-            <Form3 handleValueSelect={handleValueSelect}></Form3>
+            <Form3
+              handleValueSelect={handleValueSelect}
+              valueSelect={valueSelect}
+            ></Form3>
           )}
           {valueSelect === "Báo cáo chiến lược" && (
-            <Form3 handleValueSelect={handleValueSelect}></Form3>
+            <Form3
+              handleValueSelect={handleValueSelect}
+              valueSelect={valueSelect}
+            ></Form3>
           )}
           <a
             href="#"
