@@ -6,6 +6,12 @@ const BCPTapi = {
   insertBCPT: (url, params, config) => {
     return axiosClient.post(url, params, config);
   },
+  deleteBCPT: (url, config) => {
+    return axiosClient.delete(url, config);
+  },
+  caculateBCPT: (url, config) => {
+    return axiosClient.get(url, config);
+  },
 };
 
 export default BCPTapi;

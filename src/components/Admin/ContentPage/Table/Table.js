@@ -59,6 +59,44 @@ function Table({
     nameDaySearchTo,
   ]);
 
+  const findIndex = (id) => {
+    var results = -1;
+    DanhSachBCPT.forEach((BCPT, index) => {
+      if (BCPT.id === id) {
+        results = index;
+      }
+    });
+    return results;
+  };
+
+  const handleDeleteBCPT = (id) => {
+    const config = {
+      headers: {
+        Authorization:
+          "Bearer " + (Cookies.get("token") || sessionStorage.getItem("token")),
+      },
+    };
+
+    const deleteBCPT = async () => {
+      try {
+        let choice = confirm("Bạn có chắc chắn xóa không ?"); //eslint-disable-line
+        if (choice === true) {
+          const url = `https://beta.wichart.vn/wichartapi/admin/bcpt/${id}`;
+          const response = await BCPTapi.deleteBCPT(url, config);
+          const index = findIndex(id);
+          var cloneDanhSachBCPT = [...DanhSachBCPT];
+          cloneDanhSachBCPT.splice(index, 1);
+          setDanhSachBCPT(cloneDanhSachBCPT);
+          alert("Xóa Thành Công!!!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    deleteBCPT();
+  };
+
   const showDSBCPT = DanhSachBCPT.map((BCPT, index) => {
     return (
       <tr
@@ -95,7 +133,12 @@ function Table({
         </td>
         <td className="px-6 py-4 text-right">
           <button className="bg-blue-500 px-[12px] py-[8px] rounded-[4px]">
-            <span className="text-yellow-50">Xóa</span>
+            <span
+              className="text-yellow-50"
+              onClick={() => handleDeleteBCPT(BCPT.id)}
+            >
+              Xóa
+            </span>
           </button>
         </td>
       </tr>
