@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 import BCPTapi from "../../../../api/BCPTapi";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useRecoilState } from "recoil";
+import { BCPTData } from "../../../../store/DanhSachBCPT";
 
 const schema = yup
   .object({
@@ -15,8 +17,6 @@ const schema = yup
     lnst_duphong_n1: yup.number().positive().integer().required(),
     lnst_duphong_n2: yup.number().positive().integer().required(),
     doanhthu_duphong: yup.number().positive().integer().required(),
-    ngaykn: yup.date(),
-    ngay_congbo: yup.date(),
   })
   .required();
 
@@ -35,10 +35,43 @@ function Form({ handleValueSelect, valueSelect }) {
     resolver: yupResolver(schema),
   });
 
+  const [DanhSachBCPT, setDanhSachBCPT] = useRecoilState(BCPTData);
+
   const onSubmit = (data) => {
-    console.log(data);
+    const {
+      doanhthu_duphong,
+      file,
+      giamuctieu,
+      khuyennghi,
+      lnst_duphong,
+      lnst_duphong_n1,
+      lnst_duphong_n2,
+      loaibaocao,
+      mack,
+      ngaykn,
+      ngay_congbo,
+      nguon,
+      tenbaocao,
+    } = data;
+
+    const formDataBCPT = new FormData();
+    formDataBCPT.append("file", file[0]);
+    formDataBCPT.append("doanhthu_duphong", doanhthu_duphong);
+    formDataBCPT.append("giamuctieu", giamuctieu);
+    formDataBCPT.append("khuyennghi", khuyennghi);
+    formDataBCPT.append("lnst_duphong", lnst_duphong);
+    formDataBCPT.append("lnst_duphong_n1", lnst_duphong_n1);
+    formDataBCPT.append("lnst_duphong_n2", lnst_duphong_n2);
+    formDataBCPT.append("loaibaocao", loaibaocao);
+    formDataBCPT.append("mack", mack);
+    formDataBCPT.append("ngaykn", ngaykn);
+    formDataBCPT.append("ngay_congbo", ngay_congbo);
+    formDataBCPT.append("nguon", nguon);
+    formDataBCPT.append("tenbaocao", tenbaocao);
+
     const config = {
       headers: {
+        "Content-Type": "multipart/form-data",
         Authorization:
           "Bearer " + (Cookies.get("token") || sessionStorage.getItem("token")),
       },
@@ -46,7 +79,12 @@ function Form({ handleValueSelect, valueSelect }) {
     const insertBCPT = async () => {
       try {
         const url = "https://beta.wichart.vn/wichartapi/admin/bcpt";
-        const response = await BCPTapi.insertBCPT(url, data, config);
+        const response = await BCPTapi.insertBCPT(url, formDataBCPT, config);
+        const fetchDanhSachBCPT = await BCPTapi.getAll(
+          `${url}?limit=10`,
+          config
+        );
+        setDanhSachBCPT(fetchDanhSachBCPT.content.data);
         alert("Thêm Thành Công!!!");
       } catch (error) {
         console.log(error);
@@ -123,7 +161,7 @@ function Form({ handleValueSelect, valueSelect }) {
               placeholder="LNST dự phóng năm"
               {...register("lnst_duphong", { required: true })}
             />
-            <p>{errors.giamuctieu?.message}</p>
+            <p>{errors.lnst_duphong?.message}</p>
           </li>
           <li>
             {" "}
@@ -134,7 +172,7 @@ function Form({ handleValueSelect, valueSelect }) {
               {...register("lnst_duphong_n1", { required: true })}
             />
           </li>
-          <p>{errors.giamuctieu?.message}</p>
+          <p>{errors.lnst_duphong_n1?.message}</p>
           <li>
             {" "}
             <input
@@ -153,7 +191,7 @@ function Form({ handleValueSelect, valueSelect }) {
               placeholder="Doanh thu dự phóng"
               {...register("doanhthu_duphong", { required: true })}
             />
-            <p>{errors.giamuctieu?.message}</p>
+            <p>{errors.doanhthu_duphong?.message}</p>
           </li>
           <li>
             {" "}
@@ -181,7 +219,6 @@ function Form({ handleValueSelect, valueSelect }) {
               placeholder="Ngày Khuyến Nghị"
               {...register("ngaykn", { required: true })}
             />
-            <p>{errors.ngaykn?.message}</p>
           </li>
 
           <li>

@@ -112,9 +112,7 @@ function Table({
         <td className="px-6 py-4">{BCPT.mack}</td>
         <td className="px-6 py-4">{BCPT.nguon}</td>
         <td className="px-6 py-4">
-          <a
-            href={`https://data.wichart.vn/public/baocaophantich/${BCPT.linktai_wi}`}
-          >
+          <a href={BCPT.url}>
             <span className="hover:text-cyan-500 hover:underline">
               {BCPT.tenbaocao}
             </span>

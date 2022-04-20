@@ -5,15 +5,8 @@ import Sortable from "sortablejs";
 import { useForm } from "react-hook-form";
 import BCPTapi from "../../../../api/BCPTapi";
 import Cookies from "js-cookie";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
-const schema = yup
-  .object({
-    ngaykn: yup.date(),
-    ngay_congbo: yup.date(),
-  })
-  .required();
+import { useRecoilState } from "recoil";
+import { BCPTData } from "../../../../store/DanhSachBCPT";
 
 function Form2({ handleValueSelect, valueSelect }) {
   useEffect(() => {
@@ -26,13 +19,32 @@ function Form2({ handleValueSelect, valueSelect }) {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
+  } = useForm();
+
+  const [DanhSachBCPT, setDanhSachBCPT] = useRecoilState(BCPTData);
 
   const onSubmit = (data) => {
-    console.log(data);
+    const {
+      file,
+      khuyennghi,
+      loaibaocao,
+      ngaykn,
+      ngay_congbo,
+      nguon,
+      tenbaocao,
+    } = data;
+
+    const formDataBCPT = new FormData();
+    formDataBCPT.append("file", file[0]);
+    formDataBCPT.append("khuyennghi", khuyennghi);
+    formDataBCPT.append("loaibaocao", loaibaocao);
+    formDataBCPT.append("ngaykn", ngaykn);
+    formDataBCPT.append("ngay_congbo", ngay_congbo);
+    formDataBCPT.append("nguon", nguon);
+    formDataBCPT.append("tenbaocao", tenbaocao);
+
     const config = {
+      "Content-Type": "multipart/form-data",
       headers: {
         Authorization:
           "Bearer " + (Cookies.get("token") || sessionStorage.getItem("token")),
@@ -41,7 +53,12 @@ function Form2({ handleValueSelect, valueSelect }) {
     const insertBCPT = async () => {
       try {
         const url = "https://beta.wichart.vn/wichartapi/admin/bcpt";
-        const response = await BCPTapi.insertBCPT(url, data, config);
+        const response = await BCPTapi.insertBCPT(url, formDataBCPT, config);
+        const fetchDanhSachBCPT = await BCPTapi.getAll(
+          `${url}?limit=10`,
+          config
+        );
+        setDanhSachBCPT(fetchDanhSachBCPT.content.data);
         alert("Thêm Thành Công!!!");
       } catch (error) {
         console.log(error);
@@ -136,7 +153,6 @@ function Form2({ handleValueSelect, valueSelect }) {
               placeholder="Khuyến nghị (mua/bán)"
               {...register("khuyennghi", { required: true })}
             />
-            <p>{errors.khuyennghi?.message}</p>
           </li>
           <li>
             {" "}
@@ -146,7 +162,6 @@ function Form2({ handleValueSelect, valueSelect }) {
               placeholder="Ngày cập nhật"
               {...register("ngay_congbo", { required: true })}
             />
-            <p>{errors.ngay_congbo?.message}</p>
           </li>
           {/* <li>
             {" "}
