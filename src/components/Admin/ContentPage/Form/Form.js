@@ -37,6 +37,13 @@ function Form({ handleValueSelect, valueSelect }) {
 
   const [DanhSachBCPT, setDanhSachBCPT] = useRecoilState(BCPTData);
 
+  const date = new Date();
+  const [today, setToday] = useState(date.toISOString().substring(0, 10));
+
+  const handleDay = (e) => {
+    setToday(e.target.value);
+  };
+
   const onSubmit = (data) => {
     const {
       doanhthu_duphong,
@@ -58,7 +65,7 @@ function Form({ handleValueSelect, valueSelect }) {
     formDataBCPT.append("file", file[0]);
     formDataBCPT.append("doanhthu_duphong", doanhthu_duphong);
     formDataBCPT.append("giamuctieu", giamuctieu);
-    formDataBCPT.append("khuyennghi", khuyennghi);
+    formDataBCPT.append("khuyennghi", khuyennghi.toUpperCase());
     formDataBCPT.append("lnst_duphong", lnst_duphong);
     formDataBCPT.append("lnst_duphong_n1", lnst_duphong_n1);
     formDataBCPT.append("lnst_duphong_n2", lnst_duphong_n2);
@@ -93,6 +100,14 @@ function Form({ handleValueSelect, valueSelect }) {
     insertBCPT();
   };
 
+  var onFocus = (e) => {
+    e.currentTarget.type = "date";
+  };
+
+  var onBlur = (e) => {
+    e.currentTarget.type = "text";
+  };
+
   return (
     <div>
       {" "}
@@ -109,7 +124,6 @@ function Form({ handleValueSelect, valueSelect }) {
                 onChange: handleValueSelect,
               })}
             >
-              <option value="">---Loại Báo Cáo---</option>
               <option value="Báo cáo doanh nghiệp">Báo cáo doanh nghiệp</option>
               <option value="Báo cáo ngành">Báo cáo ngành</option>
               <option value="Báo cáo vĩ mô">Báo cáo vĩ mô</option>
@@ -207,8 +221,12 @@ function Form({ handleValueSelect, valueSelect }) {
             <input
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Ngày cập nhật"
-              {...register("ngay_congbo", { required: true })}
+              placeholder="Ngày khuyến nghị"
+              onFocus={onFocus}
+              {...register("ngay_congbo", {
+                required: true,
+                onBlur: onBlur,
+              })}
             />
           </li>
           <li>
@@ -216,8 +234,14 @@ function Form({ handleValueSelect, valueSelect }) {
             <input
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Ngày Khuyến Nghị"
-              {...register("ngaykn", { required: true })}
+              placeholder="Ngày cập nhật"
+              onFocus={onFocus}
+              value={today}
+              {...register("ngaykn", {
+                required: true,
+                onBlur: onBlur,
+                onChange: handleDay,
+              })}
             />
           </li>
 

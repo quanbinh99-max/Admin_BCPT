@@ -178,10 +178,10 @@ function Table({
                 Loại BC
               </th>
               <th scope="col" className="px-6 py-3">
-                Ngày KN
+                Ngày Cập nhật
               </th>
               <th scope="col" className="px-6 py-3">
-                Ngày Cập Nhật
+                Ngày khuyến nghị
               </th>
               <th scope="col" className="px-6 py-3">
                 Xóa

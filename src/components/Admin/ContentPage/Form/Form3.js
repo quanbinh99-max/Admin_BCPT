@@ -1,6 +1,6 @@
 // Báo Cáo Chiến Lược + Báo Cáo Vĩ Mô
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sortable from "sortablejs";
 import { useForm } from "react-hook-form";
 import BCPTapi from "../../../../api/BCPTapi";
@@ -22,6 +22,12 @@ function Form3({ handleValueSelect, valueSelect }) {
   } = useForm();
 
   const [DanhSachBCPT, setDanhSachBCPT] = useRecoilState(BCPTData);
+  const date = new Date();
+  const [today, setToday] = useState(date.toISOString().substring(0, 10));
+
+  const handleDay = (e) => {
+    setToday(e.target.value);
+  };
 
   const onSubmit = (data) => {
     const {
@@ -66,6 +72,14 @@ function Form3({ handleValueSelect, valueSelect }) {
     insertBCPT();
   };
 
+  var onFocus = (e) => {
+    e.currentTarget.type = "date";
+  };
+
+  var onBlur = (e) => {
+    e.currentTarget.type = "text";
+  };
+
   return (
     <div>
       {" "}
@@ -83,7 +97,6 @@ function Form3({ handleValueSelect, valueSelect }) {
                 onChange: handleValueSelect,
               })}
             >
-              <option value="">---Loại Báo Cáo---</option>
               <option value="Báo cáo doanh nghiệp">Báo cáo doanh nghiệp</option>
               <option value="Báo cáo ngành">Báo cáo ngành</option>
               <option value="Báo cáo vĩ mô">Báo cáo vĩ mô</option>
@@ -158,8 +171,9 @@ function Form3({ handleValueSelect, valueSelect }) {
             <input
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Ngày cập nhật"
-              {...register("ngay_congbo", { required: true })}
+              placeholder="Ngày khuyến nghị"
+              onFocus={onFocus}
+              {...register("ngay_congbo", { required: true, onBlur: onBlur })}
             />
           </li>
           <li>
@@ -167,8 +181,14 @@ function Form3({ handleValueSelect, valueSelect }) {
             <input
               type="text"
               className="w-[100%] h-[38px] px-[12px] py-[6px] border-[1px] rounded-[6px]"
-              placeholder="Ngày Khuyến Nghị"
-              {...register("ngaykn", { required: true })}
+              placeholder="Ngày cập nhật"
+              onFocus={onFocus}
+              value={today}
+              {...register("ngaykn", {
+                required: true,
+                onBlur: onBlur,
+                onChange: handleDay,
+              })}
             />
           </li>
 

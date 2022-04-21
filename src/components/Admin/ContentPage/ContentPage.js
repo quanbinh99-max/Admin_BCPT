@@ -107,7 +107,10 @@ function ContentPage(props) {
             className="bg-[#1bb99a] py-[6px] px-[12px] rounded-[4px] text-white flex"
             onClick={handleCalculate}
           >
-            <span className="mr-1"> Tính toán báo cáo phân tích</span>
+            <span className="mr-1" style={{ cursor: isLoading && "wait" }}>
+              {" "}
+              Tính toán báo cáo phân tích
+            </span>
             {isLoading === true && (
               <tr className="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-[#1bb99a] odd:dark:bg-gray-800 even:dark:bg-gray-700 w-[26px] h-[26px]">
                 <th
@@ -147,7 +150,7 @@ function ContentPage(props) {
                   className="rounded-[16px] text-[12px] font-[500]"
                   onChange={valueOptionSearch}
                 >
-                  <option value="">---Tìm kiếm theo---</option>
+                  <option value="">---</option>
                   <option value="mack">Mã chứng khoán</option>
                   <option value="nguon">Nguồn </option>
                   <option value="tenbaocao">Tên báo cáo</option>
@@ -170,7 +173,7 @@ function ContentPage(props) {
                 className="rounded-[16px] text-[12px] font-[500]"
                 onChange={valueOptionDaySearch}
               >
-                <option value="">---Tìm kiếm theo---</option>
+                <option value="">---</option>
                 <option value="ngaykn"> Ngày Khuyến Nghị </option>
                 <option value="ngay_congbo">Ngày Công Bố </option>
               </select>
