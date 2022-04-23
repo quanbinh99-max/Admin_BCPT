@@ -81,8 +81,8 @@ function Table({
       try {
         let choice = confirm("Bạn có chắc chắn xóa không ?"); //eslint-disable-line
         if (choice === true) {
-          const url = `https://beta.wichart.vn/wichartapi/admin/bcpt/${id}`;
-          const response = await BCPTapi.deleteBCPT(url, config);
+          const url = `https://beta.wichart.vn/wichartapi`;
+          const response = await BCPTapi.deleteBCPT(id, config);
           const index = findIndex(id);
           var cloneDanhSachBCPT = [...DanhSachBCPT];
           cloneDanhSachBCPT.splice(index, 1);

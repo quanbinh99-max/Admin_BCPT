@@ -64,21 +64,6 @@ function TopBar(props) {
                 isShowNavUser === false ? "hidden" : ""
               } `}
             >
-              <div className="px-[20px] py-[12px] text-[16px]">
-                Welcome ! John
-              </div>
-              <div className="px-[20px] py-[12px]">
-                <i className="fa-solid fa-user mr-[5px]"></i>
-                <span>Profile</span>
-              </div>
-              <div className="px-[20px] py-[12px] text-[14.4px]">
-                <i className="fa-solid fa-gear mr-[5px]"></i>
-                <span>Settings</span>
-              </div>
-              <div className="px-[20px] py-[12px] text-[14.4px]">
-                <i className="fa-solid fa-lock mr-[5px]"></i>
-                <span>Lock Screen</span>
-              </div>
               <div
                 className="px-[20px] py-[12px] text-[14.4px] cursor-pointer"
                 onClick={handleLogout}

@@ -4,7 +4,7 @@ import queryString from "query-string";
 // Set up default config for http requests here
 
 const axiosClient = axios.create({
-  baseURL: "",
+  baseURL: "https://beta.wichart.vn/wichartapi",
   headers: {
     "content-type": "application/json",
   },
